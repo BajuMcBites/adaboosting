@@ -29,7 +29,7 @@ def convertDataToImages(data, im_size):
     for index in range(np.size(data, 0)):
         temp_image = np.reshape(data[index, :], [im_size[0], im_size[1], 3])
         gray_image = temp_image[:, :, 0] * 0.299 + temp_image[:, :, 1] * 0.587 + temp_image[:, :, 2] * 0.114
-        images.append(adaboost.Image(gray_image))
+        images.append(ada.Image(gray_image))
         if ((index + 1) % 5000 == 0):
             print("Converted " + str(index + 1) + " rows to images")
 

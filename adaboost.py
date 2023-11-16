@@ -104,14 +104,14 @@ class ImAdaBoost:
     train_images -> list of Image type training images
     labels -> list of labels true -> match false -> not match
     '''
-    def train (self, train_images, labels, number_of_classifiers):
-        weights = self.weights
+    def train (self, train_images, labels, number_of_classifiers, save_while_training_file = None):
 
-        for weight_index in range(len(labels)):
-            if labels[weight_index] == -1:
-                weights.append(0.5 / (0.9 * len(labels)))
-            else:
-                weights.append(0.5 / (0.1 * len(labels)))
+        if (len(self.weights) == 0):
+            for weight_index in range(len(labels)):
+                if labels[weight_index] == -1:
+                    self.weights.append(0.5 / (0.9 * len(labels)))
+                else:
+                    self.weights.append(0.5 / (0.1 * len(labels)))
 
         im_features_matrix = np.zeros((len(train_images), len(self.features)))
 
@@ -121,21 +121,22 @@ class ImAdaBoost:
             if ((im_index + 1) % 5000 == 0):
                 print("Described " + str(im_index + 1) + " images as features")
         
-        for current_classifier in range(number_of_classifiers):
+        for current_classifier in range(number_of_classifiers - len(self.weak_classifiers)):
             weak_classifier = WeakClassifier()
-            weak_classifier.train(im_features_matrix, labels, weights)
+            weak_classifier.train(im_features_matrix, labels, self.weights)
 
             for im_index in range(np.size(train_images, 0)):
-                weights[im_index] *= np.exp(-weak_classifier.alpha * labels[im_index] * weak_classifier.classify(im_features_matrix[im_index, :]))
+                self.weights[im_index] *= np.exp(-weak_classifier.alpha * labels[im_index] * weak_classifier.classify(im_features_matrix[im_index, :]))
             
-            weights /= sum(weights)
+            self.weights /= sum(self.weights)
 
             self.weak_classifiers.append(weak_classifier)   
 
             print("Trained " + str(current_classifier + 1) + " weak classifiers")
+
+            if (save_while_training_file != None and (current_classifier + 1) % 3 == 0):
+                self.store_model(save_while_training_file)
        
-        self.weights = weights    
-    
     def predict (self, im):
         features = [feature.apply_on_image(im) for feature in self.features]
         return self.predict_on_features(features)

@@ -32,13 +32,7 @@ if __name__ == "__main__":
     print ("FINAL ACCURACY: " + str(correct / len(test_images)))
 
     
-
-
-
-    
-
-                                                
-
+    #CODE FOR TESTING INDIVIDUAL CLASSIFIER
     # correct = 0
     # postiive_correct = 0
     # for index, image in enumerate(testImages):
@@ -51,9 +45,8 @@ if __name__ == "__main__":
     #     if (index % 1000 == 0):
     #         print("ACCURACY: " + str(correct/(index + 1)))
         
-
-    print("FINAL ACCURACY: " + str(correct/len(test_images)))
-    print(postiive_correct)
+    # print("FINAL ACCURACY: " + str(correct/len(test_images)))
+    # print(postiive_correct)
 
 
 

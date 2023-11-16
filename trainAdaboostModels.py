@@ -67,6 +67,7 @@ if __name__ == "__main__":
     images = convertDataToImages(data, [32, 32])
 
     model = ada.ImAdaBoost(2000, [32, 32])
-    model.train(images, labels, 30)
+    # model.reconstruct_model(file_to_save)
+    model.train(images, labels, 30, file_to_save)
     model.store_model(file_to_save)
 

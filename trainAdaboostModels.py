@@ -66,8 +66,15 @@ if __name__ == "__main__":
     labels = convertLabels(labels, class_to_train)
     images = convertDataToImages(data, [32, 32])
 
+    NUMBER_WEAK_CLASSIFIERS = 30
+
+    # TRAINING FROM SCRATCH
     model = ada.ImAdaBoost(2000, [32, 32])
+
+    # UNCOMMENT IF CONTINUEING TRAINING FROM SAVE
+    # model = ada.ImAdaBoost(0, [32, 32])
     # model.reconstruct_model(file_to_save)
-    model.train(images, labels, 30, file_to_save)
+    
+    model.train(images, labels, NUMBER_WEAK_CLASSIFIERS, file_to_save)
     model.store_model(file_to_save)
 
